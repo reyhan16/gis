@@ -1,1 +1,332 @@
 
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>GIS - KELOMPOK 1</title>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="" name="keywords">
+  <meta content="" name="description">
+
+  <!-- Favicons -->
+  <link href="img/favicon.png" rel="icon">
+  <link href="img/apple-touch-icon.png" rel="apple-touch-icon">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,700,700i|Raleway:300,400,500,700,800" rel="stylesheet">
+
+  <!-- Bootstrap CSS File -->
+  <link href="lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Libraries CSS Files -->
+  <link href="lib/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+  <link href="lib/animate/animate.min.css" rel="stylesheet">
+  <link href="lib/venobox/venobox.css" rel="stylesheet">
+  <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+
+  <!-- Main Stylesheet File -->
+  <link href="css/style.css" rel="stylesheet">
+
+
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <link href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" rel="stylesheet"
+        integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+        crossorigin="" />
+
+  <!-- =======================================================
+    Theme Name: TheEvent
+    Theme URL: https://bootstrapmade.com/theevent-conference-event-bootstrap-template/
+    Author: BootstrapMade.com
+    License: https://bootstrapmade.com/license/
+  ======================================================= -->
+</head>
+
+<body>
+
+  <!--==========================
+    Header
+  ============================-->
+  <header id="header">
+    <div class="container">
+
+      <div id="logo" class="pull-left">
+        <!-- Uncomment below if you prefer to use a text logo -->
+        <!-- <h1><a href="#main">C<span>o</span>nf</a></h1>-->
+        <a href="#intro" class="scrollto"><img src="img/logo.png" alt="" title=""></a>
+      </div>
+
+        </ul>
+      </nav><!-- #nav-menu-container -->
+    </div>
+  </header><!-- #header -->
+
+  <!--==========================
+    Intro Section
+  ============================-->
+
+
+  <main id="main">
+
+    <!--==========================
+      About Section
+    ============================-->
+    <section id="about">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-6">
+            
+            <br>
+            <h2>Tentang Web Ini</h2>
+            <p>Halaman ini akan menampilkan data dari firebase yang berisi suhu, kelembapan, longtitude dan latitude.</p>
+          </div>
+          
+          
+        </div>
+      </div>
+    </section>
+
+   
+
+
+    <!--==========================
+      Venue Section
+    ============================-->
+    <section id="venue" class="wow fadeInUp">
+
+      <div class="container-fluid">
+
+        <div class="section-header">
+          <h2>Data dari Firebase</h2>
+          <p>Sensor Suhu dan Kelembapan - Web GIS IoT</p>
+        </div>
+
+ <div class="container py-4"
+   
+
+        <div id="map" style="height: 600px;"></div>
+        <div class="m-2">
+            <table class="table table-striped table-striped table-bordered" id="sensor">
+                <thead>
+                    <tr align="center" >
+                            <th>Lokasi</th>
+                            <th>Kelas</th>
+                            <th>Suhu</th>
+                            <th>Kelembaban</th>
+                            <th>Latitude</th>
+                            <th>Longitude</th>
+                            <th>Terakhir diperbaharui</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    </section>
+
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"
+        integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous">
+        </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"
+        integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous">
+        </script>
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+        integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+        crossorigin=""></script>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.2.0/firebase-app.js";
+        import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/9.2.0/firebase-database.js";
+
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyDf0bYRqPK8Sb1Fjpr8x45pqLT7JNXbLwc",
+            authDomain: "praktikumsig-2b4b1.firebaseapp.com",
+            databaseURL: "https://praktikumsig-2b4b1-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "praktikumsig-2b4b1",
+            storageBucket: "praktikumsig-2b4b1.appspot.com",
+            messagingSenderId: "836740190661",
+            appId: "1:836740190661:web:3a2014a90319b60cc6bbac"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+
+        // create map
+        const map = L.map('map').setView([-6.6061381, 106.801851], 12);
+
+        // create basemap 
+        const basemap = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        });
+
+        basemap.addTo(map);
+
+        // add bogor polygon
+        const bogorGeojson = await fetch("https://raw.githubusercontent.com/MAROON-LABKOM/script-praktikum/master/gis/bogor.geojson");
+        const geojsonBody = await bogorGeojson.json();
+        L.geoJson(geojsonBody).addTo(map);
+
+        // Get a reference to the database service
+        const db = getDatabase(app);
+        const sensorRef = ref(db, 'WEBGIS');
+
+        // add marker from realtime iot devices
+        function addToMap(data) {
+            L.marker([data.latitude, data.longitude])
+                .addTo(map)
+                .bindPopup(`<b>${data.nama} - ${data.kelas}</b><br>Suhu: ${data.suhu}<br>Kelembaban: ${data.kelembaban}<br>Terakhir Diperbaharui:<br>${data.diperbaharui}`);
+        }
+
+        function addToTable(data) {
+            const findRow = document.querySelector(`tr[nama="${data.nama}"]`);
+            const row = findRow ?? document.createElement('tr');
+            row.setAttribute("nama", data.nama);
+            row.innerHTML = `
+                <td align="center" >${data.nama}</td>
+                <td align="center" >${data.kelas}</td>
+                <td align="center" >${data.suhu}</td>
+                <td align="center" >${data.kelembaban}</td>
+                <td align="center" >${data.latitude}</td>
+                <td align="center" >${data.longitude}</td>
+                <td align="center" >${data.diperbaharui}</td>
+            `;
+
+            if (!findRow) {
+                const table = document.getElementById('sensor');
+                const tbody = table.querySelector('tbody');
+                tbody.appendChild(row);
+            }
+
+        }
+
+        onValue(sensorRef, (snapshot) => {
+            if (!snapshot.exists()) return;
+            snapshot.forEach(function (data) {
+                const val = data.val();
+                addToMap(val);
+                addToTable(val);
+            });
+        });
+    </script>
+
+
+     <!--==========================
+      Speakers Section
+    ============================-->
+    <section id="speakers" class="wow fadeInUp">
+      <div class="container">
+        <div class="section-header">
+          <h2>Anggota Kelompok</h2>
+          <p>Berikut anggota Kelompok 1</p>
+        </div>
+
+        <div class="row">
+          <div class="col-lg-4 col-md-6">
+            <div class="speaker">
+              <img src="img/speakers/1.jpg" alt="Speaker 1" class="img-fluid">
+              <div class="details">
+                <h3>Adam Najmi Zidan</h3>
+                <p>NPM : 065119079</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-6">
+            <div class="speaker">
+              <img src="img/speakers/2.jpg" alt="Speaker 2" class="img-fluid">
+              <div class="details">
+                <h3>Karandev Singh</h3>
+                <p>NPM : 065119090</p>
+               
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-6">
+            <div class="speaker">
+              <img src="img/speakers/3.jpg" alt="Speaker 3" class="img-fluid">
+              <div class="details">
+                <h3>Reyhan Nazera Rusmana</h3>
+                <p>NPM : 065119099</p>
+               
+              </div>
+
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-6">
+            <div class="speaker">
+              <img src="img/speakers/4.jpg" alt="Speaker 4" class="img-fluid">
+              <div class="details">
+                <h3>Fauzan Azmi Alfiansyah</a></h3>
+                <p>NPM : 065119113</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-6">
+            <div class="speaker">
+              <img src="img/speakers/5.jpg" alt="Speaker 5" class="img-fluid">
+              <div class="details">
+                <h3>Ristina Eka Salsabila</h3>
+                <p>NPM : 065119116</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-6">
+            <div class="speaker">
+              <img src="img/speakers/6.jpg" alt="Speaker 6" class="img-fluid">
+              <div class="details">
+                <h3>Egiteguh YP</h3>
+                <p>NPM : 065119242</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+
+  <!--==========================
+    Footer
+  ============================-->
+  <footer id="footer">
+ 
+
+    <div class="container">
+      <div class="copyright">
+        &copy; <strong> Edit By <strong>Kelompok 1</strong>
+      </div>
+      <div class="credits">
+        <!--
+          All the links in the footer should remain intact.
+          You can delete the links only if you purchased the pro version.
+          Licensing information: https://bootstrapmade.com/license/
+          Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/buy/?theme=TheEvent
+        -->
+        Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
+      </div>
+    </div>
+  </footer><!-- #footer -->
+
+  <a href="#" class="back-to-top"><i class="fa fa-angle-up"></i></a>
+
+  <!-- JavaScript Libraries -->
+  <script src="lib/jquery/jquery.min.js"></script>
+  <script src="lib/jquery/jquery-migrate.min.js"></script>
+  <script src="lib/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="lib/easing/easing.min.js"></script>
+  <script src="lib/superfish/hoverIntent.js"></script>
+  <script src="lib/superfish/superfish.min.js"></script>
+  <script src="lib/wow/wow.min.js"></script>
+  <script src="lib/venobox/venobox.min.js"></script>
+  <script src="lib/owlcarousel/owl.carousel.min.js"></script>
+
+  
+
+  <!-- Template Main Javascript File -->
+  <script src="js/main.js"></script>
+</body>
+
+</html>
